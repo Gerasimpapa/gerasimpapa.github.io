@@ -143,11 +143,16 @@ class TetrisGame {
         // Touch support for mobile
         this.canvas.addEventListener('touchstart', (e) => this.handleTouchStart(e), false);
         this.canvas.addEventListener('touchmove', (e) => this.handleTouchMove(e), false);
+        this.canvas.addEventListener('touchend', (e) => this.handleTouchEnd(e), false);
+        
+        // Prevent default scroll behavior on the game canvas
+        this.canvas.addEventListener('touchmove', (e) => e.preventDefault(), { passive: false });
     }
 
     handleTouchStart(e) {
         this.touchStartX = e.touches[0].clientX;
         this.touchStartY = e.touches[0].clientY;
+        this.touchStartTime = Date.now();
     }
 
     handleTouchMove(e) {
@@ -185,6 +190,31 @@ class TetrisGame {
                 this.touchStartY = touchEndY;
             }
         }
+    }
+
+    handleTouchEnd(e) {
+        if (!this.gameRunning) return;
+        
+        const touchEndTime = Date.now();
+        const timeDiff = touchEndTime - this.touchStartTime;
+        
+        if (this.touchStartX && this.touchStartY) {
+            const touchEndX = e.changedTouches[0].clientX;
+            const touchEndY = e.changedTouches[0].clientY;
+            
+            const diffX = Math.abs(this.touchStartX - touchEndX);
+            const diffY = Math.abs(this.touchStartY - touchEndY);
+            
+            // Detect tap: quick touch with minimal movement
+            if (diffX < 10 && diffY < 10 && timeDiff < 300) {
+                this.rotatePiece();
+            }
+        }
+        
+        // Reset touch tracking
+        this.touchStartX = null;
+        this.touchStartY = null;
+        this.touchStartTime = null;
     }
 
     handleKeyPress(e) {
