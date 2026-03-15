@@ -167,7 +167,7 @@ class TetrisGame {
         
         // Swipe detection threshold
         const threshold = 30;
-        const thresholdY = 150;
+        const thresholdY = 100;
         
         if (Math.abs(diffX) > Math.abs(diffY)) {
             // Horizontal swipe
