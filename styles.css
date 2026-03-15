@@ -175,13 +175,74 @@ button:active {
     color: #00ff88;
 }
 
+.mobile-controls {
+    display: none;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-direction: column;
+}
+
+.control-row {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.mobile-btn {
+    padding: 15px 20px;
+    font-size: 14px;
+    font-weight: bold;
+    border: 2px solid #00ff88;
+    background: transparent;
+    color: #00ff88;
+    border-radius: 5px;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.2s ease;
+    box-shadow: 0 0 10px rgba(0, 255, 136, 0.2);
+    flex: 1;
+    min-width: 70px;
+    user-select: none;
+}
+
+.mobile-btn:active {
+    background: #00ff88;
+    color: #1e1e2e;
+    box-shadow: 0 0 20px rgba(0, 255, 136, 0.6);
+    transform: scale(0.95);
+}
+
+.rotate-btn {
+    flex-basis: 100%;
+}
+
+.drop-btn {
+    background: rgba(0, 255, 136, 0.1);
+}
+
+.drop-btn:active {
+    background: #ff7000;
+    border-color: #ff7000;
+    box-shadow: 0 0 20px rgba(255, 112, 0, 0.6);
+}
+
 @media (max-width: 600px) {
+    body {
+        padding: 10px;
+    }
+
     .container {
-        padding: 20px;
+        padding: 15px;
     }
     
     .header h1 {
         font-size: 32px;
+        margin-bottom: 15px;
+    }
+    
+    .game-wrapper {
+        margin-bottom: 15px;
     }
     
     .main-content {
@@ -191,6 +252,7 @@ button:active {
     
     #gameCanvas {
         width: 100%;
+        max-width: 300px;
         height: auto;
     }
     
@@ -199,10 +261,58 @@ button:active {
         flex-direction: row;
         flex-wrap: wrap;
         justify-content: center;
+        gap: 10px;
     }
     
     .info-box, .next-box {
         flex: 1;
-        min-width: 80px;
+        min-width: 70px;
+        padding: 10px;
+        font-size: 12px;
+    }
+
+    .info-box .value {
+        font-size: 20px;
+    }
+
+    .controls {
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 15px;
+    }
+
+    button {
+        padding: 10px 15px;
+        font-size: 12px;
+        flex: 1;
+        min-width: 60px;
+    }
+
+    .mobile-controls {
+        display: flex;
+    }
+
+    .mobile-btn {
+        padding: 12px 15px;
+        font-size: 13px;
+    }
+
+    .instructions {
+        padding: 15px;
+        font-size: 12px;
+    }
+
+    .instructions h3 {
+        font-size: 14px;
+        margin-bottom: 10px;
+    }
+
+    .instructions ul {
+        font-size: 12px;
+        line-height: 1.6;
+    }
+
+    .instructions li {
+        margin-bottom: 5px;
     }
 }

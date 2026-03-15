@@ -133,6 +133,58 @@ class TetrisGame {
         document.getElementById('startBtn').addEventListener('click', () => this.start());
         document.getElementById('pauseBtn').addEventListener('click', () => this.togglePause());
         document.getElementById('resetBtn').addEventListener('click', () => this.reset());
+        
+        // Mobile touch controls
+        document.getElementById('leftBtn').addEventListener('click', () => this.movePieceLeft());
+        document.getElementById('rightBtn').addEventListener('click', () => this.movePieceRight());
+        document.getElementById('rotateBtn').addEventListener('click', () => this.rotatePiece());
+        document.getElementById('dropBtn').addEventListener('click', () => this.hardDrop());
+        
+        // Touch support for mobile
+        this.canvas.addEventListener('touchstart', (e) => this.handleTouchStart(e), false);
+        this.canvas.addEventListener('touchmove', (e) => this.handleTouchMove(e), false);
+    }
+
+    handleTouchStart(e) {
+        this.touchStartX = e.touches[0].clientX;
+        this.touchStartY = e.touches[0].clientY;
+    }
+
+    handleTouchMove(e) {
+        if (!this.touchStartX || !this.touchStartY || !this.gameRunning) return;
+        
+        const touchEndX = e.touches[0].clientX;
+        const touchEndY = e.touches[0].clientY;
+        
+        const diffX = this.touchStartX - touchEndX;
+        const diffY = this.touchStartY - touchEndY;
+        
+        // Swipe detection threshold
+        const threshold = 30;
+        
+        if (Math.abs(diffX) > Math.abs(diffY)) {
+            // Horizontal swipe
+            if (diffX > threshold) {
+                // Swipe left
+                this.movePieceLeft();
+                this.touchStartX = touchEndX;
+            } else if (diffX < -threshold) {
+                // Swipe right
+                this.movePieceRight();
+                this.touchStartX = touchEndX;
+            }
+        } else {
+            // Vertical swipe
+            if (diffY > threshold) {
+                // Swipe down - hard drop
+                this.hardDrop();
+                this.touchStartY = touchEndY;
+            } else if (diffY < -threshold) {
+                // Swipe up - rotate
+                this.rotatePiece();
+                this.touchStartY = touchEndY;
+            }
+        }
     }
 
     handleKeyPress(e) {
