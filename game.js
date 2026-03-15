@@ -182,13 +182,13 @@ class TetrisGame {
         } else {
             // Vertical swipe
             if (diffY > threshold) {
+                // Swipe up - rotate
+                this.rotatePiece();
+                this.touchStartY = touchEndY;
+            } else if (diffY < -threshold) {
                 // Swipe down - hard drop
                 e.preventDefault();
                 this.hardDrop();
-                this.touchStartY = touchEndY;
-            } else if (diffY < -threshold) {
-                // Swipe up - rotate
-                this.rotatePiece();
                 this.touchStartY = touchEndY;
             }
         }
