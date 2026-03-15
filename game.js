@@ -181,9 +181,8 @@ class TetrisGame {
             }
         } else {
             // Vertical swipe
-            if (diffY < -threshold) {
+            if (diffY > threshold) {
                 // Swipe down - hard drop
-                e.preventDefault();
                 this.hardDrop();
                 this.touchStartY = touchEndY;
             } 
