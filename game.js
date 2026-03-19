@@ -122,6 +122,7 @@ class TetrisGame {
         this.level = 1;
         this.dropSpeed = 1000; // milliseconds
         this.lastDropTime = Date.now();
+        this.nextTouchHardDropTime = 0;
         this.gameRunning = false;
         
         this.setupEventListeners();
@@ -185,7 +186,10 @@ class TetrisGame {
             if (diffY < -thresholdY) {
                 // Swipe down - hard drop (negative diffY)
                 e.preventDefault();
-                this.hardDrop();
+                if (this.canTriggerTouchHardDrop()) {
+                    this.hardDrop();
+                    this.applyTouchHardDropCooldown();
+                }
                 this.touchStartY = touchEndY;
             }
         }
@@ -273,6 +277,14 @@ class TetrisGame {
             this.currentPiece.moveDown();
         }
         this.placePiece();
+    }
+
+    canTriggerTouchHardDrop() {
+        return Date.now() >= this.nextTouchHardDropTime;
+    }
+
+    applyTouchHardDropCooldown() {
+        this.nextTouchHardDropTime = Date.now() + this.dropSpeed;
     }
 
     isColliding() {
@@ -484,6 +496,7 @@ class TetrisGame {
         this.level = 1;
         this.dropSpeed = 1000;
         this.lastDropTime = Date.now();
+        this.nextTouchHardDropTime = 0;
         this.gameRunning = false;
         this.drawNextPiece();
         this.render();
@@ -501,3 +514,4 @@ class TetrisGame {
 window.addEventListener('DOMContentLoaded', () => {
     new TetrisGame();
 });
+
