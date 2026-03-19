@@ -1,73 +1,106 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tetris Game</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Tetrada Arcade</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            background: radial-gradient(circle at top, #22335f 0%, #10141f 45%, #090b12 100%);
+            color: #ecf7ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+        .menu {
+            width: min(960px, 100%);
+            background: rgba(17, 24, 39, 0.88);
+            border: 1px solid rgba(110, 231, 183, 0.35);
+            border-radius: 24px;
+            padding: 32px;
+            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
+        }
+        h1 {
+            font-size: clamp(2.2rem, 4vw, 4rem);
+            color: #6ee7b7;
+            letter-spacing: 0.08em;
+            text-align: center;
+            margin-bottom: 12px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #bfd7ea;
+            margin-bottom: 28px;
+            line-height: 1.6;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 18px;
+        }
+        .card {
+            display: block;
+            text-decoration: none;
+            color: inherit;
+            background: linear-gradient(180deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.95));
+            border: 1px solid rgba(96, 165, 250, 0.28);
+            border-radius: 18px;
+            padding: 22px;
+            transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        .card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(110, 231, 183, 0.9);
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+        }
+        .card h2 {
+            font-size: 1.35rem;
+            margin-bottom: 10px;
+            color: #f8fafc;
+        }
+        .card p {
+            color: #cbd5e1;
+            line-height: 1.6;
+            font-size: 0.97rem;
+        }
+        .tag {
+            display: inline-block;
+            margin-bottom: 12px;
+            padding: 6px 10px;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            background: rgba(110, 231, 183, 0.14);
+            color: #6ee7b7;
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>TETRADA 1.9</h1>
+    <main class="menu">
+        <h1>TETRADA ARCADE</h1>
+        <p class="subtitle">Choose a version and jump in. The mirror mode adds a Space ability that flips J/L and S/Z pieces into their mirrored form.</p>
+        <div class="grid">
+            <a class="card" href="tetrada.html">
+                <span class="tag">Classic</span>
+                <h2>Tetrada Classic</h2>
+                <p>The standard version of the game with the updated mobile swipe handling.</p>
+            </a>
+            <a class="card" href="tetrada_mirror.html">
+                <span class="tag">New</span>
+                <h2>Tetrada Mirror</h2>
+                <p>Press Space or tap Mirror to swap J with L and S with Z while the current piece is falling.</p>
+            </a>
+            <a class="card" href="Z_test.html">
+                <span class="tag">Test</span>
+                <h2>Z Piece Test</h2>
+                <p>A focused test mode that spawns only Z pieces for strategy and pattern experiments.</p>
+            </a>
         </div>
-        
-        <div class="game-wrapper">
-            <div class="main-content">
-                <canvas id="gameCanvas" width="300" height="600"></canvas>
-                <div class="info-panel">
-                    <div class="info-box">
-                        <div class="label">Score</div>
-                        <div class="value" id="score">0</div>
-                    </div>
-                    <div class="info-box">
-                        <div class="label">Lines</div>
-                        <div class="value" id="lines">0</div>
-                    </div>
-                    <div class="info-box">
-                        <div class="label">Level</div>
-                        <div class="value" id="level">1</div>
-                    </div>
-                    <div class="next-box">
-                        <div class="label">Next</div>
-                        <canvas id="nextPieceCanvas" width="100" height="100"></canvas>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="controls">
-            <button id="startBtn">Start</button>
-            <button id="pauseBtn">Pause</button>
-            <button id="resetBtn">Reset</button>
-        </div>
-
-        <div class="mobile-controls" id="mobileControls">
-            <div class="control-row">
-                <button id="rotateBtn" class="mobile-btn rotate-btn">⟳ Rotate</button>
-            </div>
-            <div class="control-row">
-                <button id="leftBtn" class="mobile-btn">◀ Left</button>
-                <button id="dropBtn" class="mobile-btn drop-btn">▼ Drop</button>
-                <button id="rightBtn" class="mobile-btn">Right ▶</button>
-            </div>
-        </div>
-        
-        <div class="instructions">
-            <h3>Controls</h3>
-            <ul>
-                <li><strong>Desktop:</strong> Arrow keys to move/rotate, P to pause, R to restart</li>
-                <li><strong>LEFT / RIGHT Arrows</strong> - Move piece</li>
-                <li><strong>DOWN Arrow</strong> - Hard drop</li>
-                <li><strong>UP Arrow</strong> - Rotate</li>
-                <li><strong>Mobile:</strong> Use buttons or swipe</li>
-                <li><strong>Swipe Left/Right</strong> - Move piece</li>
-                <li><strong>Swipe Down</strong> - Hard drop</li>
-                <li><strong>Swipe Up</strong> - Rotate</li>
-            </ul>
-        </div>
-    </div>
-    
-    <script src="game.js"></script>
+    </main>
 </body>
 </html>

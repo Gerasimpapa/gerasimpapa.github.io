@@ -1,0 +1,76 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tetrada Mirror</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>TETRADA MIRROR</h1>
+        </div>
+
+        <div class="game-wrapper">
+            <div class="main-content">
+                <canvas id="gameCanvas" width="300" height="600"></canvas>
+                <div class="info-panel">
+                    <div class="info-box">
+                        <div class="label">Score</div>
+                        <div class="value" id="score">0</div>
+                    </div>
+                    <div class="info-box">
+                        <div class="label">Lines</div>
+                        <div class="value" id="lines">0</div>
+                    </div>
+                    <div class="info-box">
+                        <div class="label">Level</div>
+                        <div class="value" id="level">1</div>
+                    </div>
+                    <div class="next-box">
+                        <div class="label">Next</div>
+                        <canvas id="nextPieceCanvas" width="100" height="100"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button id="startBtn">Start</button>
+            <button id="pauseBtn">Pause</button>
+            <button id="resetBtn">Reset</button>
+            <button id="mirrorBtnDesktop">Mirror</button>
+        </div>
+
+        <div class="mobile-controls" id="mobileControls">
+            <div class="control-row">
+                <button id="rotateBtn" class="mobile-btn">Rotate</button>
+                <button id="mirrorBtnMobile" class="mobile-btn">Mirror</button>
+            </div>
+            <div class="control-row">
+                <button id="leftBtn" class="mobile-btn">Left</button>
+                <button id="dropBtn" class="mobile-btn drop-btn">Drop</button>
+                <button id="rightBtn" class="mobile-btn">Right</button>
+            </div>
+        </div>
+
+        <div class="instructions">
+            <h3>Controls</h3>
+            <ul>
+                <li><strong>Desktop:</strong> Arrow keys to move or rotate, Space to mirror, P to pause, R to restart</li>
+                <li><strong>Space</strong> - Mirror current piece</li>
+                <li><strong>J</strong> becomes <strong>L</strong>, <strong>L</strong> becomes <strong>J</strong></li>
+                <li><strong>S</strong> becomes <strong>Z</strong>, <strong>Z</strong> becomes <strong>S</strong></li>
+                <li><strong>Left / Right</strong> - Move piece</li>
+                <li><strong>Down</strong> - Hard drop</li>
+                <li><strong>Up</strong> - Rotate</li>
+                <li><strong>Mobile:</strong> Use buttons or swipe, plus the Mirror button</li>
+            </ul>
+        </div>
+    </div>
+
+    <script src="game_mirror.js"></script>
+</body>
+</html>
+
