@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tetris Game - Z-Piece Test</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>TETRIS - Z-PIECE TEST</h1>
+            <p style="color: #ff0000; font-size: 14px; margin: 0;">Only Z-Pieces - Testing Strategy</p>
+        </div>
+        
+        <div class="game-wrapper">
+            <div class="main-content">
+                <canvas id="gameCanvas" width="300" height="600"></canvas>
+                <div class="info-panel">
+                    <div class="info-box">
+                        <div class="label">Score</div>
+                        <div class="value" id="score">0</div>
+                    </div>
+                    <div class="info-box">
+                        <div class="label">Lines</div>
+                        <div class="value" id="lines">0</div>
+                    </div>
+                    <div class="info-box">
+                        <div class="label">Level</div>
+                        <div class="value" id="level">1</div>
+                    </div>
+                    <div class="next-box">
+                        <div class="label">Next</div>
+                        <canvas id="nextPieceCanvas" width="100" height="100"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <button id="startBtn">Start</button>
+            <button id="pauseBtn">Pause</button>
+            <button id="resetBtn">Reset</button>
+        </div>
+        
+        <div class="instructions">
+            <h3>Z-Piece Test Mode</h3>
+            <p><strong>This test generates only Z-pieces continuously to test your strategy!</strong></p>
+            <h4>Controls</h4>
+            <ul>
+                <li><strong>LEFT / RIGHT Arrows</strong> - Move piece</li>
+                <li><strong>DOWN Arrow</strong> - Hard drop</li>
+                <li><strong>UP Arrow</strong> - Rotate</li>
+                <li><strong>P</strong> - Pause/Resume</li>
+                <li><strong>R</strong> - Restart</li>
+            </ul>
+        </div>
+    </div>
+    
+    <script src="game_z_only.js"></script>
+</body>
+</html>
