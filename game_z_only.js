@@ -20,6 +20,11 @@ const COLORS = {
 };
 
 // Piece Rotations
+const MIRROR_TRANSFORMS = {
+    'S': { type: 'Z', rotations: [0, 1] },
+    'Z': { type: 'S', rotations: [0, 1] },
+};
+
 const ROTATIONS = {
     'I': [
         [[0, 1], [1, 1], [2, 1], [3, 1]],      // Horizontal
@@ -122,6 +127,10 @@ class TetrisGame {
         this.level = 1;
         this.dropSpeed = 1000; // milliseconds
         this.lastDropTime = Date.now();
+        this.nextTouchHardDropTime = 0;
+        this.doubleTapThreshold = 140;
+        this.lastTapTime = 0;
+        this.singleTapTimer = null;
         this.gameRunning = false;
         
         this.setupEventListeners();
@@ -133,10 +142,116 @@ class TetrisGame {
         document.getElementById('startBtn').addEventListener('click', () => this.start());
         document.getElementById('pauseBtn').addEventListener('click', () => this.togglePause());
         document.getElementById('resetBtn').addEventListener('click', () => this.reset());
+
+        document.getElementById('leftBtn').addEventListener('click', () => this.movePieceLeft());
+        document.getElementById('rightBtn').addEventListener('click', () => this.movePieceRight());
+        document.getElementById('rotateBtn').addEventListener('click', () => this.rotatePiece());
+        ['mirrorBtnDesktop', 'mirrorBtnMobile'].forEach((buttonId) => {
+            const mirrorBtn = document.getElementById(buttonId);
+            if (mirrorBtn) {
+                mirrorBtn.addEventListener('click', () => this.mirrorCurrentPiece());
+            }
+        });
+        document.getElementById('dropBtn').addEventListener('click', () => this.hardDrop());
+
+        this.canvas.addEventListener('touchstart', (e) => this.handleTouchStart(e), false);
+        this.canvas.addEventListener('touchmove', (e) => this.handleTouchMove(e), { passive: false });
+        this.canvas.addEventListener('touchend', (e) => this.handleTouchEnd(e), false);
+    }
+
+    handleTouchStart(e) {
+        this.touchStartX = e.touches[0].clientX;
+        this.touchStartY = e.touches[0].clientY;
+        this.touchStartTime = Date.now();
+        this.hasMoved = false;
+    }
+
+    handleTouchMove(e) {
+        e.preventDefault();
+
+        if (!this.touchStartX || !this.touchStartY || !this.gameRunning) return;
+
+        this.hasMoved = true;
+        const touchEndX = e.touches[0].clientX;
+        const touchEndY = e.touches[0].clientY;
+
+        const diffX = this.touchStartX - touchEndX;
+        const diffY = this.touchStartY - touchEndY;
+
+        const threshold = 30;
+        const thresholdY = 100;
+
+        if (Math.abs(diffX) > Math.abs(diffY)) {
+            if (diffX > threshold) {
+                this.movePieceLeft();
+                this.touchStartX = touchEndX;
+            } else if (diffX < -threshold) {
+                this.movePieceRight();
+                this.touchStartX = touchEndX;
+            }
+        } else if (diffY < -thresholdY) {
+            e.preventDefault();
+            if (this.canTriggerTouchHardDrop()) {
+                this.hardDrop();
+                this.applyTouchHardDropCooldown();
+            }
+            this.touchStartY = touchEndY;
+        }
+    }
+
+    handleTouchEnd(e) {
+        e.preventDefault();
+
+        if (!this.gameRunning) return;
+
+        if (!this.hasMoved && this.touchStartTime) {
+            const timeDiff = Date.now() - this.touchStartTime;
+            if (timeDiff < 300) {
+                this.handleCanvasTap();
+            }
+        }
+
+        this.touchStartX = null;
+        this.touchStartY = null;
+        this.touchStartTime = null;
+        this.hasMoved = false;
+    }
+
+    handleCanvasTap() {
+        const now = Date.now();
+
+        if (now - this.lastTapTime <= this.doubleTapThreshold) {
+            this.clearPendingTapAction();
+            this.mirrorCurrentPiece();
+            return;
+        }
+
+        this.lastTapTime = now;
+        this.singleTapTimer = setTimeout(() => {
+            this.singleTapTimer = null;
+            this.lastTapTime = 0;
+            if (this.gameRunning && this.state === PLAYING) {
+                this.rotatePiece();
+            }
+        }, this.doubleTapThreshold);
+    }
+
+    clearPendingTapAction() {
+        if (this.singleTapTimer) {
+            clearTimeout(this.singleTapTimer);
+            this.singleTapTimer = null;
+        }
+        this.lastTapTime = 0;
     }
 
     handleKeyPress(e) {
         if (!this.gameRunning) return;
+
+        if (e.code === 'Space') {
+            e.preventDefault();
+            this.mirrorCurrentPiece();
+            return;
+        }
 
         switch(e.key.toLowerCase()) {
             case 'arrowleft':
@@ -191,12 +306,51 @@ class TetrisGame {
         this.render();
     }
 
+    mirrorCurrentPiece() {
+        if (this.state !== PLAYING) return;
+
+        const mirroredState = this.getMirroredPieceState(this.currentPiece.type, this.currentPiece.rotationState);
+        if (!mirroredState) return;
+
+        const originalType = this.currentPiece.type;
+        const originalRotation = this.currentPiece.rotationState;
+
+        this.currentPiece.type = mirroredState.type;
+        this.currentPiece.rotationState = mirroredState.rotationState;
+
+        if (this.isColliding()) {
+            this.currentPiece.type = originalType;
+            this.currentPiece.rotationState = originalRotation;
+            return;
+        }
+
+        this.render();
+    }
+
+    getMirroredPieceState(type, rotationState) {
+        const transform = MIRROR_TRANSFORMS[type];
+        if (!transform) return null;
+
+        return {
+            type: transform.type,
+            rotationState: transform.rotations[rotationState] ?? rotationState,
+        };
+    }
+
     hardDrop() {
         if (this.state !== PLAYING) return;
         while (!this.isCollidingDown()) {
             this.currentPiece.moveDown();
         }
         this.placePiece();
+    }
+
+    canTriggerTouchHardDrop() {
+        return Date.now() >= this.nextTouchHardDropTime;
+    }
+
+    applyTouchHardDropCooldown() {
+        this.nextTouchHardDropTime = Date.now() + this.dropSpeed;
     }
 
     isColliding() {
@@ -393,12 +547,14 @@ class TetrisGame {
     }
 
     gameOver() {
+        this.clearPendingTapAction();
         this.state = GAME_OVER;
         this.gameRunning = false;
         this.render();
     }
 
     reset() {
+        this.clearPendingTapAction();
         this.grid = Array(GRID_HEIGHT).fill(null).map(() => Array(GRID_WIDTH).fill(null));
         this.currentPiece = new Piece();
         this.nextPiece = new Piece();
@@ -408,6 +564,7 @@ class TetrisGame {
         this.level = 1;
         this.dropSpeed = 1000;
         this.lastDropTime = Date.now();
+        this.nextTouchHardDropTime = 0;
         this.gameRunning = false;
         this.drawNextPiece();
         this.render();

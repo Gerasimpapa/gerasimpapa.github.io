@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tetris Game - Z-Piece Test</title>
+    <title>Tetris Game - Z Piece Mirror Test</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>TETRIS - Z-PIECE TEST</h1>
-            <p style="color: #ff0000; font-size: 14px; margin: 0;">Only Z-Pieces - Testing Strategy</p>
+            <h1>TETRIS - Z MIRROR TEST</h1>
+            <p style="color: #ff0000; font-size: 14px; margin: 0;">Only Z pieces spawn, but you can mirror them into S pieces.</p>
         </div>
         
         <div class="game-wrapper">
@@ -41,18 +41,34 @@
             <button id="startBtn">Start</button>
             <button id="pauseBtn">Pause</button>
             <button id="resetBtn">Reset</button>
+            <button id="mirrorBtnDesktop">Mirror</button>
+        </div>
+
+        <div class="mobile-controls" id="mobileControls">
+            <div class="control-row">
+                <button id="rotateBtn" class="mobile-btn">Rotate</button>
+                <button id="mirrorBtnMobile" class="mobile-btn">Mirror</button>
+            </div>
+            <div class="control-row">
+                <button id="leftBtn" class="mobile-btn">Left</button>
+                <button id="dropBtn" class="mobile-btn drop-btn">Drop</button>
+                <button id="rightBtn" class="mobile-btn">Right</button>
+            </div>
         </div>
         
         <div class="instructions">
-            <h3>Z-Piece Test Mode</h3>
-            <p><strong>This test generates only Z-pieces continuously to test your strategy!</strong></p>
+            <h3>Z Piece Mirror Test</h3>
+            <p><strong>Every new piece starts as Z, and you can use mirror to turn the current piece into S.</strong></p>
             <h4>Controls</h4>
             <ul>
-                <li><strong>LEFT / RIGHT Arrows</strong> - Move piece</li>
-                <li><strong>DOWN Arrow</strong> - Hard drop</li>
-                <li><strong>UP Arrow</strong> - Rotate</li>
-                <li><strong>P</strong> - Pause/Resume</li>
-                <li><strong>R</strong> - Restart</li>
+                <li><strong>Space</strong> - Mirror current Z or S piece</li>
+                <li><strong>Left / Right</strong> - Move piece</li>
+                <li><strong>Down</strong> - Hard drop</li>
+                <li><strong>Up</strong> - Rotate</li>
+                <li><strong>Mobile single tap</strong> - Rotate</li>
+                <li><strong>Mobile double tap</strong> - Mirror</li>
+                <li><strong>Swipe Left / Right</strong> - Move piece</li>
+                <li><strong>Swipe Down</strong> - Hard drop</li>
             </ul>
         </div>
     </div>

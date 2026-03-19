@@ -129,6 +129,9 @@ class TetrisGame {
         this.dropSpeed = 1000; // milliseconds
         this.lastDropTime = Date.now();
         this.nextTouchHardDropTime = 0;
+        this.doubleTapThreshold = 140;
+        this.lastTapTime = 0;
+        this.singleTapTimer = null;
         this.gameRunning = false;
         
         this.setupEventListeners();
@@ -212,11 +215,10 @@ class TetrisGame {
         
         if (!this.gameRunning) return;
         
-        // If no significant movement, it's a tap - so rotate
         if (!this.hasMoved && this.touchStartTime) {
             const timeDiff = Date.now() - this.touchStartTime;
             if (timeDiff < 300) {
-                this.rotatePiece();
+                this.handleCanvasTap();
             }
         }
         
@@ -225,6 +227,33 @@ class TetrisGame {
         this.touchStartY = null;
         this.touchStartTime = null;
         this.hasMoved = false;
+    }
+
+    handleCanvasTap() {
+        const now = Date.now();
+
+        if (now - this.lastTapTime <= this.doubleTapThreshold) {
+            this.clearPendingTapAction();
+            this.mirrorCurrentPiece();
+            return;
+        }
+
+        this.lastTapTime = now;
+        this.singleTapTimer = setTimeout(() => {
+            this.singleTapTimer = null;
+            this.lastTapTime = 0;
+            if (this.gameRunning && this.state === PLAYING) {
+                this.rotatePiece();
+            }
+        }, this.doubleTapThreshold);
+    }
+
+    clearPendingTapAction() {
+        if (this.singleTapTimer) {
+            clearTimeout(this.singleTapTimer);
+            this.singleTapTimer = null;
+        }
+        this.lastTapTime = 0;
     }
 
     handleKeyPress(e) {
@@ -529,12 +558,14 @@ class TetrisGame {
     }
 
     gameOver() {
+        this.clearPendingTapAction();
         this.state = GAME_OVER;
         this.gameRunning = false;
         this.render();
     }
 
     reset() {
+        this.clearPendingTapAction();
         this.grid = Array(GRID_HEIGHT).fill(null).map(() => Array(GRID_WIDTH).fill(null));
         this.currentPiece = new Piece();
         this.nextPiece = new Piece();
@@ -545,6 +576,9 @@ class TetrisGame {
         this.dropSpeed = 1000;
         this.lastDropTime = Date.now();
         this.nextTouchHardDropTime = 0;
+        this.doubleTapThreshold = 140;
+        this.lastTapTime = 0;
+        this.singleTapTimer = null;
         this.gameRunning = false;
         this.drawNextPiece();
         this.render();
