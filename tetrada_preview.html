@@ -7,16 +7,15 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
+    <div class="container preview-layout-container">
         <div class="header">
             <h1>TETRADA PREVIEW LAB</h1>
             <p style="color: #bfd7ea; font-size: 14px; margin-top: 8px;">Choose how much lookahead you want, from zero hidden pieces to ten visible upcoming pieces.</p>
         </div>
 
         <div class="game-wrapper">
-            <div class="main-content">
-                <canvas id="gameCanvas" width="300" height="600"></canvas>
-                <div class="info-panel">
+            <div class="main-content preview-main-content">
+                <div class="info-panel preview-stats-panel">
                     <div class="info-box">
                         <div class="label">Score</div>
                         <div class="value" id="score">0</div>
@@ -29,6 +28,11 @@
                         <div class="label">Level</div>
                         <div class="value" id="level">1</div>
                     </div>
+                </div>
+
+                <canvas id="gameCanvas" width="300" height="600"></canvas>
+
+                <div class="info-panel preview-queue-panel">
                     <div class="queue-box">
                         <div class="queue-controls">
                             <label for="previewCountSelect">Next Pieces Visible</label>
