@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tetrada Autoplay</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container preview-layout-container">
+        <div class="header">
+            <h1>TETRADA AUTOPLAY</h1>
+            <p style="color: #bfd7ea; font-size: 14px; margin-top: 8px;">
+                The computer plays by itself, seeing only the current piece and testing every legal placement before it drops.
+            </p>
+        </div>
+
+        <div class="game-wrapper">
+            <div class="main-content preview-main-content">
+                <div class="info-panel preview-stats-panel">
+                    <div class="info-box">
+                        <div class="label">Score</div>
+                        <div class="value" id="score">0</div>
+                    </div>
+                    <div class="info-box">
+                        <div class="label">Lines</div>
+                        <div class="value" id="lines">0</div>
+                    </div>
+                    <div class="info-box">
+                        <div class="label">Level</div>
+                        <div class="value" id="level">1</div>
+                    </div>
+                </div>
+
+                <canvas id="gameCanvas" width="300" height="600"></canvas>
+
+                <div class="info-panel preview-queue-panel">
+                    <div class="queue-box">
+                        <div class="label">Autoplay Status</div>
+                        <div class="next-empty" id="aiStatus">Waiting to start.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button id="startBtn">Start</button>
+            <button id="pauseBtn">Pause</button>
+            <button id="resetBtn">Reset</button>
+        </div>
+
+        <div class="instructions">
+            <h3>Autoplay Rules</h3>
+            <ul>
+                <li><strong>No preview:</strong> The AI sees only the current piece and does not look at the next one.</li>
+                <li><strong>Priority 1:</strong> Clear lines whenever possible.</li>
+                <li><strong>Priority 2:</strong> Prefer placements that fit tightly and avoid creating or covering holes.</li>
+                <li><strong>Priority 3:</strong> Break ties by keeping the stack lower and smoother.</li>
+                <li><strong>Controls:</strong> Start begins autoplay, Pause stops it, Reset clears the board.</li>
+                <li><strong>Keyboard:</strong> Press P to pause or resume, and R to reset.</li>
+            </ul>
+        </div>
+    </div>
+
+    <script src="game_autoplay.js"></script>
+</body>
+</html>
