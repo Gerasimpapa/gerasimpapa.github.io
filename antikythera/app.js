@@ -89,11 +89,11 @@
       return;
     }
 
-    const diskSize = Math.min(width, height);
+    const diskSize = Math.min(width, height) * 0.94;
     const x0 = (width - diskSize) / 2;
     const y0 = (height - diskSize) / 2;
     const centerX = x0 + diskSize / 2;
-    const centerY = y0 + diskSize * 0.9;
+    const centerY = y0 + diskSize / 2;
 
     names.forEach((name, index) => {
       const image = images.get(name);
@@ -138,7 +138,7 @@
         resolve();
       };
       image.onerror = () => reject(new Error(`Could not load ring image: ${name}`));
-      image.src = `../Rings/ring_${name}.png`;
+      image.src = `Rings/ring_${name}.png`;
     })));
   }
 
