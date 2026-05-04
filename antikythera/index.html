@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Antikythera Rings AD16 HTML</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="app-shell">
+    <section class="stage" aria-label="Antikythera ring display">
+      <canvas id="ringsCanvas"></canvas>
+    </section>
+
+    <section class="controls" aria-label="Date and time controls">
+      <div class="date-row">
+        <label for="dateInput">UTC Date/Time</label>
+        <input id="dateSlider" type="range" min="-36525" max="36525" value="0" step="0.25">
+        <input id="dateInput" type="datetime-local" step="60">
+      </div>
+
+      <div class="button-row" aria-label="Date step controls">
+        <button type="button" data-action="now">Now</button>
+        <button type="button" data-days="-1">-Day</button>
+        <button type="button" data-days="1">+Day</button>
+        <button type="button" data-months="-1">-Month</button>
+        <button type="button" data-months="1">+Month</button>
+        <button type="button" data-years="-1">-Year</button>
+        <button type="button" data-years="1">+Year</button>
+        <button type="button" data-years="-10">-Decade</button>
+        <button type="button" data-years="10">+Decade</button>
+      </div>
+
+      <div class="readout" id="readout" aria-live="polite"></div>
+    </section>
+  </main>
+
+  <script src="vendor/astronomy.browser.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
