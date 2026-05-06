@@ -82,14 +82,12 @@
     const width = canvas.clientWidth;
     const height = canvas.clientHeight;
     ctx.clearRect(0, 0, width, height);
-    ctx.fillStyle = "#ffffff";
-    ctx.fillRect(0, 0, width, height);
 
     if (!imagesReady || width <= 0 || height <= 0) {
       return;
     }
 
-    const diskSize = Math.min(width, height) * 0.94;
+    const diskSize = Math.min(width, height) * 0.67;
     const x0 = (width - diskSize) / 2;
     const y0 = (height - diskSize) / 2;
     const centerX = x0 + diskSize / 2;

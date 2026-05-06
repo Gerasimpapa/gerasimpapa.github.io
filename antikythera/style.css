@@ -20,7 +20,7 @@ body {
 }
 
 body {
-  background: #ffffff;
+  background: #000000;
   color: var(--ink);
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   overflow: hidden;
@@ -38,10 +38,23 @@ body {
   min-height: 0;
   position: relative;
   overflow: hidden;
-  background: #ffffff;
+  background: #000000;
+}
+
+.stage::before {
+  content: "";
+  position: absolute;
+  inset: 3%;
+  background-image: url("Rings/ChatGPT Image May 6, 2026, 04_53_52 PM.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  pointer-events: none;
 }
 
 #ringsCanvas {
+  position: relative;
+  z-index: 1;
   width: 100%;
   height: 100%;
   display: block;
