@@ -1,116 +1,133 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tetrada Arcade</title>
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body {
-            min-height: 100vh;
-            font-family: Arial, sans-serif;
-            background: radial-gradient(circle at top, #22335f 0%, #10141f 45%, #090b12 100%);
-            color: #ecf7ff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 24px;
-        }
-        .menu {
-            width: min(960px, 100%);
-            background: rgba(17, 24, 39, 0.88);
-            border: 1px solid rgba(110, 231, 183, 0.35);
-            border-radius: 24px;
-            padding: 32px;
-            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
-        }
-        h1 {
-            font-size: clamp(2.2rem, 4vw, 4rem);
-            color: #6ee7b7;
-            letter-spacing: 0.08em;
-            text-align: center;
-            margin-bottom: 12px;
-        }
-        .subtitle {
-            text-align: center;
-            color: #bfd7ea;
-            margin-bottom: 28px;
-            line-height: 1.6;
-        }
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 18px;
-        }
-        .card {
-            display: block;
-            text-decoration: none;
-            color: inherit;
-            background: linear-gradient(180deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.95));
-            border: 1px solid rgba(96, 165, 250, 0.28);
-            border-radius: 18px;
-            padding: 22px;
-            transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
-        }
-        .card:hover {
-            transform: translateY(-4px);
-            border-color: rgba(110, 231, 183, 0.9);
-            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
-        }
-        .card h2 {
-            font-size: 1.35rem;
-            margin-bottom: 10px;
-            color: #f8fafc;
-        }
-        .card p {
-            color: #cbd5e1;
-            line-height: 1.6;
-            font-size: 0.97rem;
-        }
-        .tag {
-            display: inline-block;
-            margin-bottom: 12px;
-            padding: 6px 10px;
-            border-radius: 999px;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            background: rgba(110, 231, 183, 0.14);
-            color: #6ee7b7;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gerasim Projects</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      background: #090b12;
+      color: #f6f0e7;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    main {
+      width: min(980px, 100%);
+    }
+
+    h1 {
+      font-size: clamp(2.2rem, 5vw, 4.5rem);
+      line-height: 1;
+      letter-spacing: 0.04em;
+      margin-bottom: 14px;
+    }
+
+    .subtitle {
+      color: #c7d2df;
+      font-size: 1.05rem;
+      line-height: 1.6;
+      max-width: 680px;
+      margin-bottom: 32px;
+    }
+
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 18px;
+    }
+
+    .project-card {
+      min-height: 220px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      text-decoration: none;
+      color: inherit;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 8px;
+      padding: 24px;
+      background: #121827;
+      transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+    }
+
+    .project-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(255, 255, 255, 0.55);
+      background: #172034;
+    }
+
+    .project-card.antikythera {
+      background: #21170e;
+      border-color: rgba(194, 138, 63, 0.5);
+    }
+
+    .project-card.antikythera:hover {
+      background: #2b1d10;
+      border-color: rgba(214, 163, 86, 0.85);
+    }
+
+    .tag {
+      width: fit-content;
+      border: 1px solid currentColor;
+      border-radius: 999px;
+      padding: 5px 10px;
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #93c5fd;
+    }
+
+    .antikythera .tag {
+      color: #d6a356;
+    }
+
+    h2 {
+      font-size: 1.65rem;
+      margin: 22px 0 10px;
+    }
+
+    p {
+      color: #d5dde8;
+      line-height: 1.55;
+    }
+
+    .antikythera p {
+      color: #eadcc8;
+    }
+  </style>
 </head>
 <body>
-    <main class="menu">
-        <h1>TETRADA ARCADE</h1>
-        <p class="subtitle">Choose a version and jump in. The mirror mode adds a Space ability that flips J/L and S/Z pieces into their mirrored form.</p>
-        <div class="grid">
-            <a class="card" href="tetrada.html">
-                <span class="tag">Classic</span>
-                <h2>Tetrada Classic</h2>
-                <p>The standard version of the game with the updated mobile swipe handling.</p>
-            </a>
-            <a class="card" href="tetrada_mirror.html">
-                <span class="tag">New</span>
-                <h2>Tetrada Mirror</h2>
-                <p>Press Space or tap Mirror to swap J with L and S with Z while the current piece is falling.</p>
-            </a>
-            <a class="card" href="tetrada_preview.html">
-                <span class="tag">New</span>
-                <h2>Tetrada Preview Lab</h2>
-                <p>Choose how many upcoming pieces to reveal, from 0 all the way up to 10, and practice with different lookahead depth.</p>
-            </a>
-            <a class="card" href="tetrada_autoplay.html">
-                <span class="tag">AI</span>
-                <h2>Tetrada Autoplay</h2>
-                <p>Watch the computer play on its own using only the current piece, choosing the best legal placement with no next-piece preview.</p>
-            </a>
-            <a class="card" href="Z_test.html">
-                <span class="tag">Test</span>
-                <h2>Z Piece Test</h2>
-                <p>A focused test mode that spawns only Z pieces for strategy and pattern experiments.</p>
-            </a>
+  <main>
+    <h1>Projects</h1>
+    <p class="subtitle">Choose a project to open.</p>
+    <div class="project-grid">
+      <a class="project-card" href="tetrada/">
+        <div>
+          <span class="tag">Game</span>
+          <h2>Tetrada</h2>
+          <p>Classic, Mirror, Preview Lab, Autoplay, and Z-piece test versions.</p>
         </div>
-    </main>
+      </a>
+
+      <a class="project-card antikythera" href="antikythera/">
+        <div>
+          <span class="tag">Astronomy</span>
+          <h2>Antikythera</h2>
+          <p>Planetary ring display inspired by the Antikythera mechanism.</p>
+        </div>
+      </a>
+    </div>
+  </main>
 </body>
 </html>

@@ -4,6 +4,7 @@
   const names = ["moon", "mercury", "venus", "sun", "mars", "jupiter", "saturn"];
   const bodyNames = ["Moon", "Mercury", "Venus", "Sun", "Mars", "Jupiter", "Saturn"];
   const radiusPx = [270, 307, 345, 395, 432, 470, 510];
+  const drawOrder = ["moon", "mercury", "venus", "sun", "mars", "jupiter", "saturn"];
   const baseMax = Math.max(...radiusPx);
 
   const canvas = document.getElementById("ringsCanvas");
@@ -93,7 +94,8 @@
     const centerX = x0 + diskSize / 2;
     const centerY = y0 + diskSize / 2;
 
-    names.forEach((name, index) => {
+    drawOrder.forEach((name) => {
+      const index = names.indexOf(name);
       const image = images.get(name);
       const scale = (radiusPx[index] * 2) / image.naturalWidth * (diskSize / (2 * baseMax));
       const size = image.naturalWidth * scale;

@@ -5,7 +5,7 @@ Antikythera Rings AD16 displays planetary ring images inspired by the Antikyther
 ## Project Structure
 
 ```text
-Antikythera/
+antikythera/
 +-- README.md
 +-- Rings/
 |   +-- ring_moon.png
@@ -15,14 +15,11 @@ Antikythera/
 |   +-- ring_mars.png
 |   +-- ring_jupiter.png
 |   +-- ring_saturn.png
-+-- Scripts/
-    +-- anti16.py
-+-- html/
-    +-- index.html
-    +-- style.css
-    +-- app.js
-    +-- vendor/
-        +-- astronomy.browser.min.js
++-- index.html
++-- style.css
++-- app.js
++-- vendor/
+    +-- astronomy.browser.min.js
 ```
 
 The script expects the ring images in `Rings/` relative to the project root. It can be launched from the project root or from another working directory because it resolves the image path from the script location.
@@ -66,12 +63,11 @@ source ~/.venvs/antikythera/bin/activate
 python Scripts/anti16.py
 ```
 
-## HTML Version
+## Browser Version
 
-The browser version lives in `html/` and uses the JavaScript build of Astronomy Engine:
+The browser version uses the JavaScript build of Astronomy Engine:
 
 ```text
-html/
 +-- index.html
 +-- style.css
 +-- app.js
@@ -82,13 +78,13 @@ html/
 Open this file in a browser:
 
 ```text
-G:\My Drive\Projects\Antikythera\html\index.html
+G:\My Drive\Projects\gerasimpapa.github.io\antikythera\index.html
 ```
 
 From WSL, the same file is:
 
 ```bash
-"/mnt/g/My Drive/Projects/Antikythera/html/index.html"
+"/mnt/g/My Drive/Projects/gerasimpapa.github.io/antikythera/index.html"
 ```
 
 The HTML version does not require Kivy or Python at runtime. It loads the existing ring images from `Rings/` and calculates ecliptic longitudes in the browser with Astronomy Engine.
@@ -113,7 +109,7 @@ After changing files:
 
 ```bash
 git status
-git add README.md Scripts/anti16.py Rings/
+git add README.md index.html style.css app.js Rings/ vendor/
 git commit -m "Add AD16 script and ring assets"
 git push
 ```
