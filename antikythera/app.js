@@ -4,7 +4,17 @@
   const names = ["moon", "mercury", "venus", "sun", "mars", "jupiter", "saturn"];
   const bodyNames = ["Moon", "Mercury", "Venus", "Sun", "Mars", "Jupiter", "Saturn"];
   const radiusPx = [270, 307, 345, 395, 432, 470, 510];
-  const drawOrder = ["moon", "mercury", "venus", "sun", "mars", "jupiter", "saturn"];
+  const moonLayer = "moon";
+  const overlayLayers = names.filter((name) => name !== moonLayer);
+  const imageFiles = {
+    moon: "ring_moon_masked.png",
+    mercury: "ring_mercury.png",
+    venus: "ring_venus.png",
+    sun: "ring_sun.png",
+    mars: "ring_mars.png",
+    jupiter: "ring_jupiter.png",
+    saturn: "ring_saturn.png"
+  };
   const baseMax = Math.max(...radiusPx);
 
   const canvas = document.getElementById("ringsCanvas");
@@ -94,7 +104,7 @@
     const centerX = x0 + diskSize / 2;
     const centerY = y0 + diskSize / 2;
 
-    drawOrder.forEach((name) => {
+    function drawRing(name) {
       const index = names.indexOf(name);
       const image = images.get(name);
       const scale = (radiusPx[index] * 2) / image.naturalWidth * (diskSize / (2 * baseMax));
@@ -105,7 +115,10 @@
       ctx.rotate((-angles[index] * Math.PI) / 180);
       ctx.drawImage(image, -size / 2, -size / 2, size, size);
       ctx.restore();
-    });
+    }
+
+    drawRing(moonLayer);
+    overlayLayers.forEach(drawRing);
   }
 
   function renderReadout() {
@@ -138,7 +151,7 @@
         resolve();
       };
       image.onerror = () => reject(new Error(`Could not load ring image: ${name}`));
-      image.src = `Rings/ring_${name}.png`;
+      image.src = `Rings/${imageFiles[name]}`;
     })));
   }
 
@@ -164,7 +177,7 @@
       }
 
       setDate(addUtcParts(currentDate, {
-        days: Number(button.dataset.days || 0),
+        days: Number(button.dataset.days || 0) + Number(button.dataset.weeks || 0) * 7,
         months: Number(button.dataset.months || 0),
         years: Number(button.dataset.years || 0)
       }));
