@@ -48,7 +48,10 @@
       second: "2-digit",
       hourCycle: "h23"
     });
-    const parts = Object.fromEntries(formatter.formatToParts(date).map((part) => [part.type, part.value]));
+    const parts = {};
+    formatter.formatToParts(date).forEach((part) => {
+      parts[part.type] = part.value;
+    });
 
     return {
       year: Number(parts.year),
