@@ -21,6 +21,7 @@
   const ctx = canvas.getContext("2d");
   const dateInput = document.getElementById("dateInput");
   const dateSlider = document.getElementById("dateSlider");
+  const timeZoneSelect = document.getElementById("timeZoneSelect");
   const readout = document.getElementById("readout");
   const launchDate = new Date();
   const images = new Map();
@@ -32,25 +33,73 @@
     return String(value).padStart(2, "0");
   }
 
-  function formatUtcInput(date) {
+  function getSelectedTimeZone() {
+    return timeZoneSelect.value || "UTC";
+  }
+
+  function getZonedParts(date, timeZone) {
+    const formatter = new Intl.DateTimeFormat("en-US", {
+      timeZone,
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hourCycle: "h23"
+    });
+    const parts = Object.fromEntries(formatter.formatToParts(date).map((part) => [part.type, part.value]));
+
+    return {
+      year: Number(parts.year),
+      month: Number(parts.month),
+      day: Number(parts.day),
+      hour: Number(parts.hour),
+      minute: Number(parts.minute),
+      second: Number(parts.second)
+    };
+  }
+
+  function formatDateInput(date, timeZone) {
+    const parts = getZonedParts(date, timeZone);
     return [
-      date.getUTCFullYear(),
-      pad(date.getUTCMonth() + 1),
-      pad(date.getUTCDate())
+      parts.year,
+      pad(parts.month),
+      pad(parts.day)
     ].join("-") + "T" + [
-      pad(date.getUTCHours()),
-      pad(date.getUTCMinutes())
+      pad(parts.hour),
+      pad(parts.minute)
     ].join(":");
   }
 
-  function parseUtcInput(value) {
+  function getTimeZoneOffsetMs(date, timeZone) {
+    const parts = getZonedParts(date, timeZone);
+    const zonedAsUtc = Date.UTC(
+      parts.year,
+      parts.month - 1,
+      parts.day,
+      parts.hour,
+      parts.minute,
+      parts.second
+    );
+    return zonedAsUtc - date.getTime();
+  }
+
+  function parseDateInput(value, timeZone) {
     const match = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})$/.exec(value);
     if (!match) {
       return null;
     }
 
     const [, year, month, day, hour, minute] = match.map(Number);
-    const date = new Date(Date.UTC(year, month - 1, day, hour, minute, 0));
+    const localAsUtc = Date.UTC(year, month - 1, day, hour, minute, 0);
+    let utcTime = localAsUtc;
+
+    for (let i = 0; i < 3; i += 1) {
+      utcTime = localAsUtc - getTimeZoneOffsetMs(new Date(utcTime), timeZone);
+    }
+
+    const date = new Date(utcTime);
     return Number.isFinite(date.getTime()) ? date : null;
   }
 
@@ -58,12 +107,17 @@
     return (a.getTime() - b.getTime()) / 86400000;
   }
 
-  function addUtcParts(date, parts) {
-    const next = new Date(date.getTime());
-    next.setUTCFullYear(next.getUTCFullYear() + (parts.years || 0));
-    next.setUTCMonth(next.getUTCMonth() + (parts.months || 0));
-    next.setUTCDate(next.getUTCDate() + (parts.days || 0));
-    return next;
+  function addZonedParts(date, parts, timeZone) {
+    const zoned = getZonedParts(date, timeZone);
+    const localDate = new Date(Date.UTC(
+      zoned.year + (parts.years || 0),
+      zoned.month - 1 + (parts.months || 0),
+      zoned.day + (parts.days || 0),
+      zoned.hour,
+      zoned.minute,
+      0
+    ));
+    return parseDateInput(formatDateInput(localDate, "UTC"), timeZone);
   }
 
   function resizeCanvas() {
@@ -132,7 +186,7 @@
     calculateAngles(currentDate);
 
     if (!options || options.updateInput !== false) {
-      dateInput.value = formatUtcInput(currentDate);
+      dateInput.value = formatDateInput(currentDate, getSelectedTimeZone());
     }
 
     if (!options || options.updateSlider !== false) {
@@ -161,12 +215,16 @@
   });
 
   dateInput.addEventListener("change", () => {
-    const parsed = parseUtcInput(dateInput.value);
+    const parsed = parseDateInput(dateInput.value, getSelectedTimeZone());
     if (parsed) {
       setDate(parsed, { updateInput: false });
     } else {
-      dateInput.value = formatUtcInput(currentDate);
+      dateInput.value = formatDateInput(currentDate, getSelectedTimeZone());
     }
+  });
+
+  timeZoneSelect.addEventListener("change", () => {
+    dateInput.value = formatDateInput(currentDate, getSelectedTimeZone());
   });
 
   document.querySelectorAll(".button-row button").forEach((button) => {
@@ -176,11 +234,11 @@
         return;
       }
 
-      setDate(addUtcParts(currentDate, {
+      setDate(addZonedParts(currentDate, {
         days: Number(button.dataset.days || 0) + Number(button.dataset.weeks || 0) * 7,
         months: Number(button.dataset.months || 0),
         years: Number(button.dataset.years || 0)
-      }));
+      }, getSelectedTimeZone()));
     });
   });
 

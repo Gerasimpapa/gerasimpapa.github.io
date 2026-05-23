@@ -14,21 +14,49 @@
 
     <section class="controls" aria-label="Date and time controls">
       <div class="date-row">
-        <label for="dateInput">UTC Date/Time</label>
+        <label for="dateInput">Date/Time</label>
         <input id="dateSlider" type="range" min="-36525" max="36525" value="0" step="0.25">
-        <input id="dateInput" type="datetime-local" step="60">
+        <div class="date-fields">
+          <input id="dateInput" type="datetime-local" step="60">
+          <select id="timeZoneSelect" aria-label="Time zone">
+            <option value="Pacific/Pago_Pago">UTC-11 SST - Pago Pago, Niue, Midway</option>
+            <option value="Pacific/Honolulu">UTC-10 HST - Honolulu, Papeete, Rarotonga</option>
+            <option value="America/Anchorage">UTC-09/-08 AKT - Anchorage, Juneau, Gambier</option>
+            <option value="America/Los_Angeles">UTC-08/-07 PT - Los Angeles, Vancouver, Tijuana</option>
+            <option value="America/Denver">UTC-07/-06 MT - Denver, Calgary, Phoenix</option>
+            <option value="America/Chicago">UTC-06/-05 CT - Chicago, Mexico City, Guatemala City</option>
+            <option value="America/New_York">UTC-05/-04 ET - New York, Toronto, Lima</option>
+            <option value="America/Santiago">UTC-04/-03 CLT - Santiago, Caracas, La Paz</option>
+            <option value="America/Sao_Paulo">UTC-03 BRT/ART - Sao Paulo, Buenos Aires, Montevideo</option>
+            <option value="Atlantic/South_Georgia">UTC-02 GST - South Georgia, Fernando de Noronha</option>
+            <option value="Atlantic/Azores">UTC-01/+00 AZOT - Azores, Cape Verde, Ittoqqortoormiit</option>
+            <option value="Europe/London">UTC+00/+01 GMT/BST - London, Accra, Reykjavik</option>
+            <option value="Europe/Paris">UTC+01/+02 CET - Paris, Lagos, Madrid</option>
+            <option value="Europe/Athens">UTC+02/+03 EET - Athens, Cairo, Johannesburg</option>
+            <option value="Europe/Istanbul">UTC+03 TRT/EAT/AST - Istanbul, Nairobi, Riyadh</option>
+            <option value="Asia/Dubai">UTC+04 GST - Dubai, Baku, Tbilisi</option>
+            <option value="Asia/Karachi">UTC+05 PKT - Karachi, Tashkent, Yekaterinburg</option>
+            <option value="Asia/Dhaka">UTC+06 BST/ALMT - Dhaka, Almaty, Thimphu</option>
+            <option value="Asia/Bangkok">UTC+07 ICT/WIB - Bangkok, Jakarta, Hanoi</option>
+            <option value="Asia/Shanghai">UTC+08 CST/PHT/AWST - Shanghai, Manila, Perth</option>
+            <option value="Asia/Tokyo">UTC+09 JST/KST - Tokyo, Seoul, Osaka</option>
+            <option value="Australia/Sydney">UTC+10/+11 AET - Sydney, Brisbane, Port Moresby</option>
+            <option value="Pacific/Noumea">UTC+11 NCT/SBT - Noumea, Honiara, Magadan</option>
+            <option value="Pacific/Auckland">UTC+12/+13 NZT - Auckland, Suva, Wellington</option>
+          </select>
+        </div>
       </div>
 
       <div class="button-row" aria-label="Date step controls">
-        <button type="button" data-action="now">Now</button>
-        <button type="button" data-days="-1">-Day</button>
-        <button type="button" data-days="1">+Day</button>
-        <button type="button" data-weeks="-1">-Week</button>
-        <button type="button" data-weeks="1">+Week</button>
-        <button type="button" data-months="-1">-Month</button>
-        <button type="button" data-months="1">+Month</button>
-        <button type="button" data-years="-1">-Year</button>
-        <button type="button" data-years="1">+Year</button>
+        <button class="step-now" type="button" data-action="now">Now</button>
+        <button class="step-minus step-day" type="button" data-days="-1">-1 Day</button>
+        <button class="step-plus step-day" type="button" data-days="1">+1 Day</button>
+        <button class="step-minus step-week" type="button" data-weeks="-1">-1 Week</button>
+        <button class="step-plus step-week" type="button" data-weeks="1">+1 Week</button>
+        <button class="step-minus step-month" type="button" data-months="-1">-1 Month</button>
+        <button class="step-plus step-month" type="button" data-months="1">+1 Month</button>
+        <button class="step-minus step-year" type="button" data-years="-1">-1 Year</button>
+        <button class="step-plus step-year" type="button" data-years="1">+1 Year</button>
       </div>
 
       <div class="readout" id="readout" aria-live="polite"></div>

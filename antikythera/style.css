@@ -81,6 +81,7 @@ label {
 }
 
 input,
+select,
 button {
   font: inherit;
 }
@@ -90,6 +91,22 @@ input[type="range"] {
 }
 
 input[type="datetime-local"] {
+  width: 100%;
+  min-height: 40px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 7px 9px;
+  background: #ffffff;
+  color: var(--ink);
+}
+
+.date-fields {
+  display: grid;
+  grid-template-columns: minmax(180px, 1fr) minmax(180px, 240px);
+  gap: 8px;
+}
+
+select {
   width: 100%;
   min-height: 40px;
   border: 1px solid var(--line);
@@ -115,7 +132,8 @@ button:hover {
 }
 
 button:focus-visible,
-input:focus-visible {
+input:focus-visible,
+select:focus-visible {
   outline: 3px solid color-mix(in srgb, var(--focus), transparent 68%);
   outline-offset: 2px;
 }
@@ -157,8 +175,40 @@ input:focus-visible {
     grid-template-columns: 1fr;
   }
 
+  .date-fields {
+    grid-template-columns: 1fr;
+  }
+
   .button-row {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .step-now {
+    grid-column: 1 / -1;
+  }
+
+  .step-plus {
+    grid-column: 1;
+  }
+
+  .step-minus {
+    grid-column: 2;
+  }
+
+  .step-day {
+    grid-row: 2;
+  }
+
+  .step-week {
+    grid-row: 3;
+  }
+
+  .step-month {
+    grid-row: 4;
+  }
+
+  .step-year {
+    grid-row: 5;
   }
 
   .readout {
