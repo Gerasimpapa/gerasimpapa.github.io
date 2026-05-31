@@ -70,7 +70,7 @@ body {
 
 .date-row {
   display: grid;
-  grid-template-columns: minmax(110px, 150px) minmax(160px, 1fr) minmax(190px, 260px);
+  grid-template-columns: minmax(110px, 150px) minmax(160px, 1fr) minmax(420px, 560px);
   gap: 10px;
   align-items: center;
 }
@@ -148,7 +148,7 @@ select:focus-visible {
 .readout {
   margin-top: 10px;
   display: grid;
-  grid-template-columns: repeat(7, minmax(88px, 1fr));
+  grid-template-columns: repeat(8, minmax(88px, 1fr));
   gap: 6px;
   color: var(--muted);
   font-size: 0.85rem;

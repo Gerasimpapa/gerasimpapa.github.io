@@ -26,6 +26,7 @@
   const launchDate = new Date();
   const images = new Map();
   let angles = new Array(names.length).fill(0);
+  let lunarNodeLongitude = 0;
   let currentDate = new Date(launchDate.getTime());
   let imagesReady = false;
 
@@ -144,6 +145,41 @@
       const vector = Astronomy.GeoVector(Astronomy.Body[bodyName], astroTime, true);
       return Astronomy.Ecliptic(vector).elon;
     });
+
+    lunarNodeLongitude = calculateLunarNodeLongitude(date);
+  }
+
+  function angularDelta(fromDegrees, toDegrees) {
+    return ((((toDegrees - fromDegrees) % 360) + 540) % 360) - 180;
+  }
+
+  function calculateLunarNodeLongitude(date) {
+    const targetTime = Astronomy.MakeTime(date);
+    let node = Astronomy.SearchMoonNode(targetTime.AddDays(-35));
+    let previousAscending = null;
+    let nextAscending = null;
+
+    for (let i = 0; i < 6; i += 1) {
+      if (node.kind === Astronomy.NodeEventKind.Ascending) {
+        if (node.time.ut <= targetTime.ut) {
+          previousAscending = node;
+        } else {
+          nextAscending = node;
+          break;
+        }
+      }
+
+      node = Astronomy.NextMoonNode(node);
+    }
+
+    if (!previousAscending || !nextAscending) {
+      return Astronomy.EclipticGeoMoon(node.time).lon;
+    }
+
+    const startLongitude = Astronomy.EclipticGeoMoon(previousAscending.time).lon;
+    const endLongitude = Astronomy.EclipticGeoMoon(nextAscending.time).lon;
+    const fraction = (targetTime.ut - previousAscending.time.ut) / (nextAscending.time.ut - previousAscending.time.ut);
+    return (startLongitude + angularDelta(startLongitude, endLongitude) * fraction + 360) % 360;
   }
 
   function draw() {
@@ -174,14 +210,75 @@
       ctx.restore();
     }
 
+    function drawDraconicPointer() {
+      const pointerRadius = diskSize * 0.49;
+      const shaftStart = pointerRadius * 0.76;
+      const shaftEnd = -pointerRadius * 0.93;
+      const headLength = Math.max(18, diskSize * 0.052);
+      const headWidth = Math.max(14, diskSize * 0.038);
+      const tailWidth = Math.max(12, diskSize * 0.032);
+
+      ctx.save();
+      ctx.translate(centerX, centerY);
+      ctx.rotate((-lunarNodeLongitude * Math.PI) / 180);
+
+      ctx.lineCap = "round";
+      ctx.strokeStyle = "rgba(0, 0, 0, 0.48)";
+      ctx.lineWidth = Math.max(7, diskSize * 0.016);
+      ctx.beginPath();
+      ctx.moveTo(2, shaftStart + 2);
+      ctx.lineTo(2, shaftEnd + 2);
+      ctx.stroke();
+
+      ctx.strokeStyle = "#111111";
+      ctx.lineWidth = Math.max(5, diskSize * 0.011);
+      ctx.beginPath();
+      ctx.moveTo(0, shaftStart);
+      ctx.lineTo(0, shaftEnd);
+      ctx.stroke();
+
+      ctx.strokeStyle = "#d8b46a";
+      ctx.lineWidth = Math.max(2, diskSize * 0.005);
+      ctx.beginPath();
+      ctx.moveTo(0, shaftStart);
+      ctx.lineTo(0, shaftEnd);
+      ctx.stroke();
+
+      ctx.fillStyle = "#e6d4a5";
+      ctx.strokeStyle = "#111111";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(0, shaftEnd - headLength);
+      ctx.lineTo(-headWidth, shaftEnd + headLength * 0.22);
+      ctx.lineTo(0, shaftEnd);
+      ctx.lineTo(headWidth, shaftEnd + headLength * 0.22);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.fillStyle = "#c7a45b";
+      ctx.beginPath();
+      ctx.moveTo(0, shaftStart + headLength * 0.65);
+      ctx.lineTo(-tailWidth, shaftStart - headLength * 0.16);
+      ctx.lineTo(tailWidth, shaftStart - headLength * 0.16);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.restore();
+    }
+
     drawRing(moonLayer);
     overlayLayers.forEach(drawRing);
+    drawDraconicPointer();
   }
 
   function renderReadout() {
-    readout.innerHTML = names.map((name, index) => (
+    const planetReadout = names.map((name, index) => (
       `<div><strong>${name}</strong>${angles[index].toFixed(2)} deg</div>`
-    )).join("");
+    ));
+    planetReadout.push(`<div><strong>node</strong>${lunarNodeLongitude.toFixed(2)} deg</div>`);
+    readout.innerHTML = planetReadout.join("");
   }
 
   function setDate(date, options) {
