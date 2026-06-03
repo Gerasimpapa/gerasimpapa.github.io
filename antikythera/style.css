@@ -60,6 +60,30 @@ body {
   display: block;
 }
 
+.stage-legal-links {
+  position: absolute;
+  z-index: 2;
+  left: 30px;
+  bottom: 18px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  width: min(92%, 430px);
+  color: #7d8792;
+  font-size: 0.78rem;
+}
+
+.stage-legal-links a {
+  color: #7d8792;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(125, 135, 146, 0.45);
+}
+
+.stage-legal-links a:hover {
+  color: #aeb7c2;
+  border-bottom-color: #aeb7c2;
+}
+
 .controls {
   border-top: 1px solid var(--line);
   background: var(--panel);
@@ -171,6 +195,13 @@ select:focus-visible {
 }
 
 @media (max-width: 820px), (pointer: coarse) {
+  .stage-legal-links {
+    left: 16px;
+    right: 16px;
+    bottom: 12px;
+    width: auto;
+  }
+
   .date-row {
     grid-template-columns: 1fr;
   }

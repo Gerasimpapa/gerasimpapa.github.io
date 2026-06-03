@@ -1,52 +1,52 @@
 # Gerasim Projects
 
-This GitHub Pages repository hosts a small project landing page with links to the available browser projects.
+This repository hosts a GitHub Pages site with small browser-based projects.
 
-## Site Structure
+## Projects
+
+- `tetrada/`: Tetrada game variants.
+- `antikythera/`: Antikythera-inspired astronomical ring display.
+
+## Use
+
+Open the landing page:
 
 ```text
-gerasimpapa.github.io/
-+-- index.html
-+-- tetrada/
-|   +-- index.html
-|   +-- tetrada.html
-|   +-- tetrada_mirror.html
-|   +-- tetrada_preview.html
-|   +-- tetrada_autoplay.html
-|   +-- Z_test.html
-|   +-- styles.css
-|   +-- game.js
-|   +-- game_mirror.js
-|   +-- game_preview.js
-|   +-- game_autoplay.js
-|   +-- game_z_only.js
-+-- antikythera/
-    +-- index.html
-    +-- style.css
-    +-- app.js
-    +-- README.md
-    +-- Rings/
-    +-- vendor/
+index.html
 ```
 
-## Pages
+Or open a project directly:
 
-- Root landing page: `index.html`
-- Tetrada menu: `tetrada/index.html`
-- Antikythera Rings: `antikythera/index.html`
+```text
+tetrada/index.html
+antikythera/index.html
+```
 
-## Tetrada
+The pages are static HTML/CSS/JavaScript and can run directly in a browser.
 
-`tetrada/` contains the Tetrada game variants:
+## Current Status
 
-- Classic
-- Mirror
-- Preview Lab
-- Autoplay
-- Z Piece Test
+- The landing page links to Tetrada and Antikythera.
+- Tetrada contains Classic, Mirror, Preview Lab, Autoplay, and Z Piece Test modes.
+- Antikythera displays planetary ecliptic longitudes, timezone-aware date controls, and a lunar node pointer.
 
-All Tetrada HTML files use `tetrada/styles.css` and their matching JavaScript file in the same folder.
+## Authors
 
-## Antikythera
+Evangelos Papadopoulos and Gerasimos Papadopoulos.
 
-`antikythera/` contains the Antikythera ring display. It loads ring images from `antikythera/Rings/` and uses the bundled Astronomy Engine browser build from `antikythera/vendor/`.
+Contact: evangelos.papadopoulos@gmail.com
+
+## Planning
+
+See [ROADMAP.md](ROADMAP.md) for planned features.
+
+See [CHANGELOG.md](CHANGELOG.md) for completed changes.
+
+## License
+
+This repository uses a dual licensing model:
+
+- Open-source use: [GPLv3](GPL-3.0.txt).
+- Commercial/proprietary licensing: available separately from Evangelos Papadopoulos and Gerasimos Papadopoulos.
+
+See [LICENSE](LICENSE), [license.html](license.html), and [COMMERCIAL_LICENSE.md](COMMERCIAL_LICENSE.md).
