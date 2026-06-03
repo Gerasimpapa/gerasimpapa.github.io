@@ -4,7 +4,6 @@ This roadmap tracks planned work. The README files describe the current project 
 
 ## Planned
 
-- [ ] Add month and calendar/date placement features.
 - [ ] Add geographic latitude/longitude selection.
 - [ ] Add city/place selection for observer location.
 - [ ] Display daily coordinates.
@@ -31,5 +30,6 @@ This roadmap tracks planned work. The README files describe the current project 
 - [x] Timezone-aware date/time controls.
 - [x] Mobile date-step controls.
 - [x] Lunar draconic node pointer.
+- [x] Month and 365-day calendar ring with 5-day markings.
 - [x] Dual licensing files for GPLv3 open-source use and separate commercial licensing.
 - [x] Repository changelog.

@@ -4,6 +4,22 @@
   const names = ["moon", "mercury", "venus", "sun", "mars", "jupiter", "saturn"];
   const bodyNames = ["Moon", "Mercury", "Venus", "Sun", "Mars", "Jupiter", "Saturn"];
   const radiusPx = [270, 307, 345, 395, 432, 470, 510];
+  const calendarMonths = [
+    { name: "Jan", days: 31 },
+    { name: "Feb", days: 28 },
+    { name: "Mar", days: 31 },
+    { name: "Apr", days: 30 },
+    { name: "May", days: 31 },
+    { name: "Jun", days: 30 },
+    { name: "Jul", days: 31 },
+    { name: "Aug", days: 31 },
+    { name: "Sep", days: 30 },
+    { name: "Oct", days: 31 },
+    { name: "Nov", days: 30 },
+    { name: "Dec", days: 31 }
+  ];
+  const calendarYearDays = 365;
+  const janFirstSunLongitude = 280;
   const moonLayer = "moon";
   const overlayLayers = names.filter((name) => name !== moonLayer);
   const imageFiles = {
@@ -268,8 +284,94 @@
       ctx.restore();
     }
 
+    function polarPoint(radius, longitudeDegrees) {
+      const radians = (-longitudeDegrees - 90) * Math.PI / 180;
+      return {
+        x: Math.cos(radians) * radius,
+        y: Math.sin(radians) * radius
+      };
+    }
+
+    function drawTextOnRing(text, radius, longitudeDegrees, size, color, weight) {
+      const point = polarPoint(radius, longitudeDegrees);
+
+      ctx.save();
+      ctx.translate(centerX + point.x, centerY + point.y);
+      ctx.rotate((-longitudeDegrees * Math.PI) / 180);
+      ctx.fillStyle = color;
+      ctx.font = `${weight || 650} ${size}px system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif`;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(text, 0, 0);
+      ctx.restore();
+    }
+
+    function calendarLongitude(dayOfYear) {
+      return (janFirstSunLongitude + (dayOfYear / calendarYearDays) * 360) % 360;
+    }
+
+    function drawCalendarRing() {
+      const outerRadius = diskSize * 0.482;
+      const innerRadius = diskSize * 0.445;
+      const midRadius = (outerRadius + innerRadius) / 2;
+      let monthStartDay = 0;
+
+      ctx.save();
+      ctx.translate(centerX, centerY);
+      ctx.strokeStyle = "rgba(30, 24, 15, 0.62)";
+      ctx.lineWidth = Math.max(1, diskSize * 0.002);
+      [innerRadius, outerRadius].forEach((radius) => {
+        ctx.beginPath();
+        ctx.arc(0, 0, radius, 0, Math.PI * 2);
+        ctx.stroke();
+      });
+
+      for (let day = 0; day < calendarYearDays; day += 5) {
+        const longitude = calendarLongitude(day);
+        const tick = day % 30 === 0 ? 0.018 : 0.011;
+        const start = polarPoint(outerRadius, longitude);
+        const end = polarPoint(outerRadius - diskSize * tick, longitude);
+
+        ctx.beginPath();
+        ctx.moveTo(start.x, start.y);
+        ctx.lineTo(end.x, end.y);
+        ctx.stroke();
+      }
+
+      calendarMonths.forEach((month) => {
+        const boundaryLongitude = calendarLongitude(monthStartDay);
+        const start = polarPoint(outerRadius, boundaryLongitude);
+        const end = polarPoint(innerRadius, boundaryLongitude);
+
+        ctx.strokeStyle = "rgba(30, 24, 15, 0.78)";
+        ctx.lineWidth = Math.max(1.2, diskSize * 0.003);
+        ctx.beginPath();
+        ctx.moveTo(start.x, start.y);
+        ctx.lineTo(end.x, end.y);
+        ctx.stroke();
+
+        monthStartDay += month.days;
+      });
+      ctx.restore();
+
+      monthStartDay = 0;
+      calendarMonths.forEach((month) => {
+        const centerDay = monthStartDay + month.days / 2;
+        drawTextOnRing(
+          month.name,
+          midRadius,
+          calendarLongitude(centerDay),
+          Math.max(8, diskSize * 0.018),
+          "rgba(18, 14, 9, 0.82)",
+          700
+        );
+        monthStartDay += month.days;
+      });
+    }
+
     drawRing(moonLayer);
     overlayLayers.forEach(drawRing);
+    drawCalendarRing();
     drawDraconicPointer();
   }
 

@@ -4,6 +4,7 @@ All notable changes to this repository are recorded here.
 
 ## Unreleased
 
+- Added a 365-day calendar/month ring inside the Antikythera constellation ring, with month labels and 5-day tick markings.
 - Planned: observer location controls, daily coordinates, local coordinates, documentation expansion, Buy Me a Coffee support, and Metonic/Saros cycle display.
 - Changed licensing structure from MIT to GPLv3 for open-source use with separate commercial licensing available.
 
