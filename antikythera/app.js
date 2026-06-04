@@ -3,6 +3,7 @@
 
   const names = ["moon", "mercury", "venus", "sun", "mars", "jupiter", "saturn"];
   const bodyNames = ["Moon", "Mercury", "Venus", "Sun", "Mars", "Jupiter", "Saturn"];
+  const visualVersion = "v1.0 left controls";
   const radiusPx = [270, 307, 345, 395, 432, 470, 510];
   const calendarMonths = [
     { name: "Jan", days: 31 },
@@ -22,6 +23,17 @@
   const janFirstSunLongitude = 280;
   const moonLayer = "moon";
   const overlayLayers = names.filter((name) => name !== moonLayer);
+  const bronze = "#b78032";
+  const bronzeLight = "#eed8a0";
+  const planetBandColors = {
+    moon: "#aaa18f",
+    mercury: "#1e8591",
+    venus: "#96551f",
+    sun: "#bd8418",
+    mars: "#873719",
+    jupiter: "#a06e35",
+    saturn: "#a8863d"
+  };
   const imageFiles = {
     moon: "ring_moon_masked.png",
     mercury: "ring_mercury.png",
@@ -39,6 +51,7 @@
   const dateSlider = document.getElementById("dateSlider");
   const timeZoneSelect = document.getElementById("timeZoneSelect");
   const readout = document.getElementById("readout");
+  const versionBadge = document.getElementById("visualVersion");
   const launchDate = new Date();
   const images = new Map();
   let angles = new Array(names.length).fill(0);
@@ -133,7 +146,7 @@
       zoned.year + (parts.years || 0),
       zoned.month - 1 + (parts.months || 0),
       zoned.day + (parts.days || 0),
-      zoned.hour,
+      zoned.hour + (parts.hours || 0),
       zoned.minute,
       0
     ));
@@ -213,10 +226,46 @@
     const centerX = x0 + diskSize / 2;
     const centerY = y0 + diskSize / 2;
 
+    function scaledRadius(index) {
+      return radiusPx[index] * diskSize / (2 * baseMax);
+    }
+
+    function drawAnnulus(innerRadius, outerRadius, fillStyle) {
+      ctx.beginPath();
+      ctx.arc(0, 0, outerRadius, 0, Math.PI * 2);
+      ctx.arc(0, 0, innerRadius, 0, Math.PI * 2, true);
+      ctx.closePath();
+      ctx.fillStyle = fillStyle;
+      ctx.fill("evenodd");
+    }
+
+    function drawPlanetBands(calendarInnerRadius) {
+      const boundaries = names.map((_, index) => {
+        if (index === 0) {
+          return scaledRadius(0) - (scaledRadius(1) - scaledRadius(0)) / 2;
+        }
+
+        return (scaledRadius(index - 1) + scaledRadius(index)) / 2;
+      });
+      boundaries.push(calendarInnerRadius);
+
+      ctx.save();
+      ctx.translate(centerX, centerY);
+
+      names.forEach((name, index) => {
+        const innerRadius = Math.max(0, boundaries[index]);
+        const outerRadius = Math.max(innerRadius, boundaries[index + 1]);
+
+        drawAnnulus(innerRadius, outerRadius, planetBandColors[name] || bronzeLight);
+      });
+
+      ctx.restore();
+    }
+
     function drawRing(name) {
       const index = names.indexOf(name);
       const image = images.get(name);
-      const scale = (radiusPx[index] * 2) / image.naturalWidth * (diskSize / (2 * baseMax));
+      const scale = (scaledRadius(index) * 2) / image.naturalWidth;
       const size = image.naturalWidth * scale;
 
       ctx.save();
@@ -306,19 +355,44 @@
       ctx.restore();
     }
 
+    function drawBronzeField() {
+      const radius = diskSize * 0.405;
+      const gradient = ctx.createRadialGradient(
+        centerX - radius * 0.28,
+        centerY - radius * 0.35,
+        radius * 0.08,
+        centerX,
+        centerY,
+        radius
+      );
+
+      gradient.addColorStop(0, "#efdca4");
+      gradient.addColorStop(0.58, "#d3a75d");
+      gradient.addColorStop(1, bronze);
+
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+      ctx.fillStyle = gradient;
+      ctx.fill();
+      ctx.restore();
+    }
+
     function calendarLongitude(dayOfYear) {
       return (janFirstSunLongitude + (dayOfYear / calendarYearDays) * 360) % 360;
     }
 
     function drawCalendarRing() {
-      const outerRadius = diskSize * 0.482;
-      const innerRadius = diskSize * 0.445;
+      const outerRadius = diskSize * 0.405;
+      const innerRadius = diskSize * 0.368;
       const midRadius = (outerRadius + innerRadius) / 2;
       let monthStartDay = 0;
 
       ctx.save();
       ctx.translate(centerX, centerY);
-      ctx.strokeStyle = "rgba(30, 24, 15, 0.62)";
+      drawAnnulus(innerRadius, outerRadius, bronze);
+
+      ctx.strokeStyle = "rgba(83, 52, 18, 0.86)";
       ctx.lineWidth = Math.max(1, diskSize * 0.002);
       [innerRadius, outerRadius].forEach((radius) => {
         ctx.beginPath();
@@ -343,7 +417,7 @@
         const start = polarPoint(outerRadius, boundaryLongitude);
         const end = polarPoint(innerRadius, boundaryLongitude);
 
-        ctx.strokeStyle = "rgba(30, 24, 15, 0.78)";
+        ctx.strokeStyle = "rgba(83, 52, 18, 0.88)";
         ctx.lineWidth = Math.max(1.2, diskSize * 0.003);
         ctx.beginPath();
         ctx.moveTo(start.x, start.y);
@@ -361,18 +435,24 @@
           month.name,
           midRadius,
           calendarLongitude(centerDay),
-          Math.max(8, diskSize * 0.018),
-          "rgba(18, 14, 9, 0.82)",
+          Math.max(8, diskSize * 0.016),
+          "rgba(50, 31, 11, 0.9)",
           700
         );
         monthStartDay += month.days;
       });
     }
 
+    drawBronzeField();
+    drawPlanetBands(diskSize * 0.368);
     drawRing(moonLayer);
     overlayLayers.forEach(drawRing);
     drawCalendarRing();
     drawDraconicPointer();
+  }
+
+  if (versionBadge) {
+    versionBadge.textContent = visualVersion;
   }
 
   function renderReadout() {
@@ -438,6 +518,7 @@
 
       setDate(addZonedParts(currentDate, {
         days: Number(button.dataset.days || 0) + Number(button.dataset.weeks || 0) * 7,
+        hours: Number(button.dataset.hours || 0),
         months: Number(button.dataset.months || 0),
         years: Number(button.dataset.years || 0)
       }, getSelectedTimeZone()));

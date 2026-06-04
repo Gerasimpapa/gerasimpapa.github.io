@@ -1,9 +1,14 @@
 # Documentation Roadmap
 
-## Planned
+Documentation work is tracked by project so Antikythera, Tetrada, and future projects do not get mixed together.
+
+## Antikythera Docs
+
+### Planned
 
 - [ ] Antikythera mechanism overview.
 - [ ] Planetary ring explanation.
+- [ ] Calendar/month ring explanation.
 - [ ] Lunar node explanation.
 - [ ] Timezone and daylight saving explanation.
 - [ ] Geographic observer location guide.
@@ -13,9 +18,21 @@
 - [ ] Saros cycle guide.
 - [ ] Interactive examples.
 
-## In Progress
+## Tetrada Docs
 
-- [ ] Documentation structure.
+### Planned
+
+- [ ] Tetrada overview.
+- [ ] Tetrada controls and modes guide.
+- [ ] Classic, Mirror, Preview Lab, Autoplay, and Z Piece Test explanations.
+
+## Shared Site Docs
+
+### Planned
+
+- [ ] Licensing overview.
+- [ ] Contribution and issue workflow.
+- [ ] Project index documentation.
 
 ## Completed
 

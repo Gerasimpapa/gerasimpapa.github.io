@@ -10,10 +10,9 @@
   <main class="app-shell">
     <section class="stage" aria-label="Antikythera ring display">
       <nav class="stage-legal-links" aria-label="Legal links">
-        <a href="../license.html">Dual License</a>
-        <a href="../GPL-3.0.txt">GPLv3</a>
-        <a href="../COMMERCIAL_LICENSE.md">Commercial Licensing</a>
+        <a href="../license.html">License</a>
       </nav>
+      <div class="stage-version" id="visualVersion" aria-label="Visual version"></div>
       <canvas id="ringsCanvas"></canvas>
     </section>
 
@@ -54,14 +53,16 @@
 
       <div class="button-row" aria-label="Date step controls">
         <button class="step-now" type="button" data-action="now">Now</button>
-        <button class="step-minus step-day" type="button" data-days="-1">-1 Day</button>
+        <button class="step-plus step-hour" type="button" data-hours="1">+1 Hour</button>
+        <button class="step-minus step-hour" type="button" data-hours="-1">-1 Hour</button>
         <button class="step-plus step-day" type="button" data-days="1">+1 Day</button>
-        <button class="step-minus step-week" type="button" data-weeks="-1">-1 Week</button>
+        <button class="step-minus step-day" type="button" data-days="-1">-1 Day</button>
         <button class="step-plus step-week" type="button" data-weeks="1">+1 Week</button>
-        <button class="step-minus step-month" type="button" data-months="-1">-1 Month</button>
+        <button class="step-minus step-week" type="button" data-weeks="-1">-1 Week</button>
         <button class="step-plus step-month" type="button" data-months="1">+1 Month</button>
-        <button class="step-minus step-year" type="button" data-years="-1">-1 Year</button>
+        <button class="step-minus step-month" type="button" data-months="-1">-1 Month</button>
         <button class="step-plus step-year" type="button" data-years="1">+1 Year</button>
+        <button class="step-minus step-year" type="button" data-years="-1">-1 Year</button>
       </div>
 
       <div class="readout" id="readout" aria-live="polite"></div>
@@ -69,6 +70,6 @@
   </main>
 
   <script src="vendor/astronomy.browser.min.js?v=20260531"></script>
-  <script src="app.js?v=20260602-calendar"></script>
+  <script src="app.js?v=20260604-v10-left-controls"></script>
 </body>
 </html>
