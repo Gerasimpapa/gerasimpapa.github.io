@@ -52,6 +52,8 @@
   const timeZoneSelect = document.getElementById("timeZoneSelect");
   const readout = document.getElementById("readout");
   const versionBadge = document.getElementById("visualVersion");
+  const menuToggle = document.querySelector(".menu-toggle");
+  const menuPanel = document.getElementById("siteMenu");
   const launchDate = new Date();
   const images = new Map();
   let angles = new Array(names.length).fill(0);
@@ -490,6 +492,29 @@
       image.src = `Rings/${imageFiles[name]}`;
     })));
   }
+
+  function setMenuOpen(isOpen) {
+    menuToggle.setAttribute("aria-expanded", String(isOpen));
+    menuToggle.setAttribute("aria-label", isOpen ? "Close menu" : "Open menu");
+    menuPanel.hidden = !isOpen;
+  }
+
+  menuToggle.addEventListener("click", () => {
+    setMenuOpen(menuToggle.getAttribute("aria-expanded") !== "true");
+  });
+
+  document.addEventListener("click", (event) => {
+    if (!menuPanel.hidden && !event.target.closest(".controls-menu")) {
+      setMenuOpen(false);
+    }
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && !menuPanel.hidden) {
+      setMenuOpen(false);
+      menuToggle.focus();
+    }
+  });
 
   dateSlider.addEventListener("input", () => {
     const offsetDays = Number(dateSlider.value);

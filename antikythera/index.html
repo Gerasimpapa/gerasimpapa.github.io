@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Antikythera Rings AD16 HTML</title>
-  <link rel="stylesheet" href="style.css?v=20260531">
+  <link rel="stylesheet" href="style.css?v=20260610-doc-menu">
 </head>
 <body>
   <main class="app-shell">
@@ -17,6 +17,17 @@
     </section>
 
     <section class="controls" aria-label="Date and time controls">
+      <div class="controls-menu">
+        <button class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="siteMenu">
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </button>
+        <nav class="menu-panel" id="siteMenu" aria-label="Site menu" hidden>
+          <a href="docs/antikythera_documentation.pdf" target="_blank" rel="noopener">Documentation</a>
+        </nav>
+      </div>
+
       <div class="date-row">
         <label for="dateInput">Date/Time</label>
         <input id="dateSlider" type="range" min="-36525" max="36525" value="0" step="0.25">
@@ -70,6 +81,6 @@
   </main>
 
   <script src="vendor/astronomy.browser.min.js?v=20260531"></script>
-  <script src="app.js?v=20260604-v10-left-controls"></script>
+  <script src="app.js?v=20260610-doc-menu"></script>
 </body>
 </html>
